@@ -10,7 +10,9 @@ enum Camera_Movement {
     FORWARD,
     BACKWARD,
     LEFT,
-    RIGHT
+    RIGHT,
+    UP,
+    DOWN
 };
 
 // An abstract camera class that processes input and calculates the corresponding Euler Angles, Vectors and Matrices for use in OpenGL

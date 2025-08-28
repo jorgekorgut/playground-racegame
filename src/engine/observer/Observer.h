@@ -4,8 +4,9 @@ class Observer {
 public:
 	enum Action {
 		KEY_PRESSED,
-		KEY_RELEASED
+		KEY_RELEASED,
+		MOUSE_MOVED,
 	};
-    virtual void Notify(int action, const int value) = 0;
+    virtual void Notify(int action, void * value = nullptr) = 0;
     virtual ~Observer() {}
 };

@@ -15,9 +15,8 @@ public:
 		observers.erase(std::remove(observers.begin(), observers.end(), observer), observers.end());
     }
 
-    virtual void Notify(int action, const int value)
+    virtual void Notify(int action, void* value)
     {
-
         for(auto observer : observers) 
         {
             observer->Notify(action, value);

@@ -13,6 +13,7 @@ void Engine::Initialize()
 {
 	windowManager.Initialize();
 	inputManager.Initialize();
+
     sceneManager.Initialize();
     renderManager.Initialize();
 }
@@ -24,14 +25,13 @@ void Engine::Destroy()
 
 void Engine::StartLoop()
 {
-
     while (!glfwWindowShouldClose(windowManager.window))
     {
         float currentFrame = static_cast<float>(glfwGetTime());
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
 
-        inputManager.Update(windowManager.window);
+        inputManager.ProcessKeyboardInput(windowManager.window);
 
         renderManager.Render(windowManager, sceneManager);
 
