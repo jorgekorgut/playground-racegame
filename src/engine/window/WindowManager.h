@@ -16,5 +16,4 @@ public:
 	int windowHeight = 600;
 private:
 	const char* windowTitle = "Engine";
-
 };

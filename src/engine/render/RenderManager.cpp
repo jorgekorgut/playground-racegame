@@ -2,6 +2,8 @@
 #include <glad/glad.h>
 #include <glm/gtc/matrix_transform.hpp>
 #include "resource/ResourceManager.h"
+#include <backends/imgui_impl_opengl3.h>
+#include <backends/imgui_impl_glfw.h>
 
 RenderManager::RenderManager()
 {
@@ -18,12 +20,14 @@ void RenderManager::Destroy()
 
 }
 
-void RenderManager::Render(WindowManager& windowManager, SceneManager & sceneManager)
+void RenderManager::Clear()
 {
-
     glClearColor(clearColor.r, clearColor.g, clearColor.b, clearColor.a);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}
 
+void RenderManager::Render(WindowManager& windowManager, SceneManager & sceneManager)
+{
     shader.use();
 
     glm::mat4 projection = glm::perspective(glm::radians(sceneManager.camera.Zoom), (float)windowManager.windowWidth / (float)windowManager.windowHeight, 0.1f, 100.0f);

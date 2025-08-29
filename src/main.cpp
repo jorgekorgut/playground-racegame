@@ -34,6 +34,7 @@ int main()
 
     CameraMovement cameraMovement(engine.sceneManager.camera);
     engine.inputManager.Attach((Observer *)&cameraMovement);
+    engine.AttachUpdatable((Updatable*) &cameraMovement);
 
     engine.StartLoop();
 

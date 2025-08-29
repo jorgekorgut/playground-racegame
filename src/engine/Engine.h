@@ -4,6 +4,7 @@
 #include "window/WindowManager.h"
 #include "render/RenderManager.h"
 #include "scene/SceneManager.h"
+#include "observer/Updatable.h"
 
 class Engine {
 public:
@@ -14,6 +15,9 @@ public:
 	void Initialize();
 	void Destroy();
 	void StartLoop();
+	void AttachUpdatable(Updatable * object);
+	void DetachUpdatable(Updatable* object);
+
 
 	WindowManager windowManager;
 	InputManager inputManager;
@@ -25,6 +29,7 @@ public:
 private :
 	Engine() {}
 
+	std::vector<Updatable*> updatableList;
 	float lastFrame = 0.0f; // Time of last frame
 	static Engine* instance;
 };

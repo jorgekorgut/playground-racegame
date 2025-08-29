@@ -45,7 +45,7 @@ ModelPlane::ModelPlane(int numCol, int numRow)
 
     glm::vec3 color(1, 0, 0);
 
-    meshes.push_back(Mesh(vertices, indices, color));
+    meshes.emplace_back(vertices, indices, color);
 }
 
 void ModelPlane::Render(Shader& shader)
