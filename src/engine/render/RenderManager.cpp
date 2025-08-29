@@ -12,7 +12,7 @@ RenderManager::RenderManager()
 void RenderManager::Initialize()
 {
     shader = ResourceManager::LoadShader();
-    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 }
 
 void RenderManager::Destroy()
@@ -36,7 +36,7 @@ void RenderManager::Render(WindowManager& windowManager, SceneManager & sceneMan
     shader.setMat4("view", view);
     shader.setVec3("viewPos", sceneManager.camera.Position);
 
-    for (GameObject currentObject : sceneManager.objects)
+    for (GameObject & currentObject : sceneManager.objects)
     {
         glm::mat4 model(1.0f);
         glm::mat3 normalMatrix = glm::mat3(1.0f);

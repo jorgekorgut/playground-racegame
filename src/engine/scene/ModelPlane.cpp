@@ -3,8 +3,12 @@
 #include <iostream>
 #include <shader/Shader.h>
 
+ModelPlane* ModelPlane::Clone() const
+{
+    return new ModelPlane(numCol, numRow);
+}
 
-ModelPlane::ModelPlane(int numCol, int numRow)
+ModelPlane::ModelPlane(int numCol, int numRow) : numCol(numCol), numRow(numRow)
 {
     std::vector<Mesh::Vertex> vertices;
     std::vector<unsigned int> indices;
@@ -22,7 +26,7 @@ ModelPlane::ModelPlane(int numCol, int numRow)
         for(int j = 0; j < numVertexX; j++)
         {
             vertex.Position = glm::vec3((float)j * distanceX - 0.5f, (float)i * distanceY - 0.5f, 0);
-            vertex.Normal = glm::vec3(0, 1, 0);
+            vertex.Normal = glm::vec3(0, 0, 1);
             vertices.push_back(vertex);
         }
 	}

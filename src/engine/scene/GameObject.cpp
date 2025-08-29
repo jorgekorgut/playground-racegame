@@ -1,8 +1,27 @@
 #include "GameObject.h"
 
-GameObject::GameObject() : transform(Transform())
+GameObject::GameObject(const GameObject& other)
 {
-	model = new ModelPlane(2,2);
+	transform = other.transform;
+	model = other.model->Clone();
+}
+
+GameObject::GameObject(const Transform& transform, const Model* model)
+{
+	this->transform = transform;
+	if (model == nullptr)
+	{
+		this->model = new ModelPlane(1, 1);
+	}
+	else
+	{
+		this->model = model->Clone();
+	}
+}
+
+GameObject::~GameObject()
+{
+	delete model;
 }
 
 void GameObject::Initialize()

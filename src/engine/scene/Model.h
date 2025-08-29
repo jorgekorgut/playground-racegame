@@ -7,5 +7,6 @@ class Model
 {
 public:
     virtual void Render(Shader& shader) = 0;
+	virtual Model* Clone() const = 0;
     std::vector<Mesh> meshes;
 };

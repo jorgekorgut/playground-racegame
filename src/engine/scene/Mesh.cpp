@@ -70,8 +70,12 @@ void Mesh::UpdateVertexPosition(std::vector<glm::vec3> & positions)
             glm::vec3 normal = glm::normalize(glm::cross(v2 - v0, v1 - v0));
 
             vertices[indices[3 * currentTriangle + currentVertex]].Normal += normal;
-			vertices[indices[3 * currentTriangle + currentVertex]].Normal = glm::normalize(vertices[indices[3 * currentTriangle + currentVertex]].Normal);
         }
+	}
+
+    for (int i = 0; i < vertices.size(); i++)
+    {
+        vertices[i].Normal = glm::normalize(vertices[i].Normal);
 	}
 
     glBindVertexArray(VAO);

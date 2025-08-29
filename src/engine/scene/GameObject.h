@@ -5,7 +5,9 @@
 
 class GameObject {
 public:
-	GameObject();
+    GameObject(const GameObject& other);
+	GameObject(const Transform& transform = Transform(), const Model * model = nullptr);
+	~GameObject();
 
 	virtual void Initialize();
 	virtual void Destroy();
