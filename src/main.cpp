@@ -3,6 +3,7 @@
 
 #include "engine/Engine.h"
 #include "game/CameraMovement.h"
+#include "game/Terrain.h"
 
 int main()
 {
@@ -24,6 +25,8 @@ int main()
     engine.sceneManager.objects.push_back(plane2);
 
     engine.sceneManager.camera.Position = glm::vec3(0, 0, 5);
+
+    Terrain terrain(plane);
 
     CameraMovement cameraMovement(engine.sceneManager.camera);
     engine.inputManager.Attach((Observer *)&cameraMovement);
