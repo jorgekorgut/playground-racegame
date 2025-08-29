@@ -7,6 +7,5 @@ class Model
 {
 public:
     virtual void Render(Shader& shader) = 0;
-protected:
     std::vector<Mesh> meshes;
 };

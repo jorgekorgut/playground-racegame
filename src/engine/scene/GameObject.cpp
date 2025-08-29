@@ -2,7 +2,7 @@
 
 GameObject::GameObject() : transform(Transform())
 {
-	model = new ModelPlane();
+	model = new ModelPlane(2,2);
 }
 
 void GameObject::Initialize()

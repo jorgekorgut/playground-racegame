@@ -10,6 +10,7 @@ RenderManager::RenderManager()
 void RenderManager::Initialize()
 {
     shader = ResourceManager::LoadShader();
+    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 }
 
 void RenderManager::Destroy()
@@ -36,10 +37,10 @@ void RenderManager::Render(WindowManager& windowManager, SceneManager & sceneMan
         glm::mat4 model(1.0f);
         glm::mat3 normalMatrix = glm::mat3(1.0f);
         model = glm::translate(model, currentObject.transform.position); // translate it down so it's at the center of the scene
+        model = model * glm::mat4_cast(glm::quat(glm::radians(-currentObject.transform.rotation)));
         model = glm::scale(model, currentObject.transform.scale);
 
         shader.setMat4("model", model);
-
         normalMatrix = glm::transpose(glm::inverse(model)); // Update normal matrix only in case of non-uniform scaling
         shader.setMat3("normalMatrix", normalMatrix);
 
