@@ -3,11 +3,12 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
+#include <unordered_map>
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
-
+#include <glad/glad.h>
 
 class Shader
 {
@@ -27,4 +28,8 @@ public:
     void setVec3(const std::string& name, glm::vec3 pos);
     void setMat3(const std::string& name, glm::mat3& mat);
     void setMat4(const std::string& name, glm::mat4& mat);
+
+private :
+	GLint getUniformLocation(const std::string& name) const;
+    mutable std::unordered_map<std::string, GLint> uniformLocationCache;
 };
