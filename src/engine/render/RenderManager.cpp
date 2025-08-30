@@ -12,12 +12,25 @@ RenderManager::RenderManager()
 void RenderManager::Initialize()
 {
     shader = ResourceManager::LoadShader();
-    //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	debugShader = ResourceManager::LoadShader("shaders/DebugShader.vert", "shaders/DebugShader.frag");
 }
 
 void RenderManager::Destroy()
 {
 
+}
+
+void RenderManager::ToggleWireframeMode()
+{
+    wireframeMode = !wireframeMode;
+    if (wireframeMode)
+    {
+        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    }
+    else
+    {
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    }
 }
 
 void RenderManager::Clear()
@@ -28,26 +41,39 @@ void RenderManager::Clear()
 
 void RenderManager::Render(WindowManager& windowManager, SceneManager & sceneManager)
 {
-    shader.use();
-
     glm::mat4 projection = glm::perspective(glm::radians(sceneManager.camera.Zoom), (float)windowManager.windowWidth / (float)windowManager.windowHeight, 0.1f, 100.0f);
     glm::mat4 view = sceneManager.camera.GetViewMatrix();
+
+    shader.use();
     shader.setMat4("projection", projection);
     shader.setMat4("view", view);
     shader.setVec3("viewPos", sceneManager.camera.Position);
-
     for (GameObject & currentObject : sceneManager.objects)
     {
-        glm::mat4 model(1.0f);
-        glm::mat3 normalMatrix = glm::mat3(1.0f);
-        model = glm::translate(model, currentObject.transform.position); // translate it down so it's at the center of the scene
-        model = model * glm::mat4_cast(glm::quat(glm::radians(-currentObject.transform.rotation)));
-        model = glm::scale(model, currentObject.transform.scale);
+		glm::mat4 model = currentObject.transform.GetModelMatrix();
+        shader.setMat4("model", model); 
 
-        shader.setMat4("model", model);
-        normalMatrix = glm::transpose(glm::inverse(model)); // Update normal matrix only in case of non-uniform scaling
+        glm::mat3 normalMatrix = glm::transpose(glm::inverse(model)); // Update normal matrix only in case of non-uniform scaling
         shader.setMat3("normalMatrix", normalMatrix);
 
+		shader.setVec3("color", currentObject.color);
         currentObject.model->Render(shader);
     }
+
+	debugShader.use();
+    debugShader.setMat4("projection", projection);
+    debugShader.setMat4("view", view);
+    debugShader.setVec3("viewPos", sceneManager.camera.Position);
+    for (GameObject& currentObject : sceneManager.debugObjects)
+    {
+        glm::mat4 model = currentObject.transform.GetModelMatrix();
+        debugShader.setMat4("model", model);
+
+        glm::mat3 normalMatrix = glm::transpose(glm::inverse(model)); // Update normal matrix only in case of non-uniform scaling
+        debugShader.setMat3("normalMatrix", normalMatrix);
+
+        debugShader.setVec3("color", currentObject.color);
+        currentObject.model->Render(debugShader);
+    }
+
 }

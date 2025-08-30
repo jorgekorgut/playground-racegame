@@ -14,18 +14,18 @@ public:
         glm::vec3 Normal;
     };
 
-    Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, glm::vec3 & color);
+    Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices);
+	Mesh(Mesh& other);
     ~Mesh();
-    void UpdateVertexPosition(std::vector<glm::vec3>& positions);
-    void Render(Shader& shader);
+    void UpdateMesh();
+    virtual void Render(Shader& shader);
 
     // mesh data
     std::vector<Vertex>       vertices;
     std::vector<unsigned int> indices;
-    glm::vec3 color = glm::vec3(0);
-private:
+
+protected:
     //  render data
     unsigned int VAO, VBO, EBO;
-
     void setupMesh();
 };

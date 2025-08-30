@@ -48,9 +48,14 @@ void InputManager::ProcessKeyboardInput(GLFWwindow* window, int key, int scancod
     if (!isMenuMode)
         return;
 
-    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
     {
         SetMenuMode(false);
+    }
+
+    if (key == GLFW_KEY_1 && action == GLFW_PRESS)
+    {
+        Engine::GetInstance().renderManager.ToggleWireframeMode();
     }
 
     if (action == GLFW_PRESS)

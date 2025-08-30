@@ -3,12 +3,7 @@
 #include <iostream>
 #include <shader/Shader.h>
 
-ModelPlane* ModelPlane::Clone() const
-{
-    return new ModelPlane(numCol, numRow);
-}
-
-ModelPlane::ModelPlane(int numCol, int numRow) : numCol(numCol), numRow(numRow)
+ModelPlane::ModelPlane(int numCol, int numRow)
 {
     std::vector<Mesh::Vertex> vertices;
     std::vector<unsigned int> indices;
@@ -47,15 +42,5 @@ ModelPlane::ModelPlane(int numCol, int numRow) : numCol(numCol), numRow(numRow)
         }
 	}
 
-    glm::vec3 color(1, 0, 0);
-
-    meshes.emplace_back(vertices, indices, color);
-}
-
-void ModelPlane::Render(Shader& shader)
-{
-    for (unsigned int i = 0; i < meshes.size(); i++)
-    {
-        meshes[i].Render(shader);
-    }
+    meshes.emplace_back(std::make_unique<Mesh>(vertices, indices));
 }

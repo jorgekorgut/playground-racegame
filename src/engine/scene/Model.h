@@ -6,7 +6,29 @@
 class Model
 {
 public:
-    virtual void Render(Shader& shader) = 0;
-	virtual Model* Clone() const = 0;
-    std::vector<Mesh> meshes;
+    Model() {}
+
+    Model(const Model& other)
+    {
+        meshes.reserve(other.meshes.size());
+        for (unsigned int i = 0; i < other.meshes.size(); i++)
+        {
+            meshes.push_back(std::make_unique<Mesh>(*other.meshes[i]));
+		}
+    }
+
+    ~Model()
+    {
+
+    }
+
+    virtual void Render(Shader& shader)
+    {
+        for (unsigned int i = 0; i < meshes.size(); i++)
+        {
+            meshes[i]->Render(shader);
+        }
+    }
+
+    std::vector<std::unique_ptr<Mesh>> meshes;
 };

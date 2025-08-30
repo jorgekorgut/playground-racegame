@@ -92,18 +92,6 @@ target_link_libraries(${PROJECT_NAME} PRIVATE "${GLFW_LIBRARY_DIR}/glfw3.lib")
 # sets the Editor project as the default startup project in Visual Studio
 set_property(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}" PROPERTY VS_STARTUP_PROJECT ${PROJECT_NAME})
 
-#add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-#    COMMAND ${CMAKE_COMMAND} -E create_symlink
-#    ${CMAKE_SOURCE_DIR}/resources
-#    ${CMAKE_BINARY_DIR}/$<CONFIG>/resources ${CMAKE_BINARY_DIR}/resources
-#)
-
-#add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-#    COMMAND ${CMAKE_COMMAND} -E create_symlink
-#    ${CMAKE_SOURCE_DIR}/shaders
-#    ${CMAKE_BINARY_DIR}/$<CONFIG>/shaders ${CMAKE_BINARY_DIR}/shaders
-#)
-
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD 
     COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_SOURCE_DIR}/resources ${CMAKE_BINARY_DIR}/$<CONFIG>/resources)
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD 

@@ -1,27 +1,39 @@
 #include "GameObject.h"
 
-GameObject::GameObject(const GameObject& other)
-{
-	transform = other.transform;
-	model = other.model->Clone();
-}
 
-GameObject::GameObject(const Transform& transform, const Model* model)
+
+GameObject::GameObject(GameObject& other)
 {
-	this->transform = transform;
-	if (model == nullptr)
+	this->transform = other.transform;
+	this->color = other.color;
+	if (other.model == nullptr)
 	{
-		this->model = new ModelPlane(1, 1);
+		this->model = std::make_unique<ModelPlane>(1, 1);
 	}
 	else
 	{
-		this->model = model->Clone();
+		this->model = std::move(other.model);
+	}
+}
+
+GameObject::GameObject(const Transform& transform, glm::vec3 color, std::unique_ptr<Model> model)
+{
+	this->transform = transform;
+	this->color = color;
+
+	if (model == nullptr)
+	{
+		this->model = std::make_unique<ModelPlane>(1, 1);
+	}
+	else
+	{
+		this->model = std::move(model);
 	}
 }
 
 GameObject::~GameObject()
 {
-	delete model;
+
 }
 
 void GameObject::Initialize()

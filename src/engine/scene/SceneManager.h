@@ -9,5 +9,6 @@ public :
 	void Destroy();
 	void Update();
 	std::vector<GameObject> objects;
+	std::vector<GameObject> debugObjects;
 	Camera camera;
 };
