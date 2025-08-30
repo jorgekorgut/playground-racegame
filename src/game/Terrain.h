@@ -3,19 +3,26 @@
 #include <Engine.h>
 #include <math/Noise.h>
 #include <scene/ModelLine.h>
+#include "math/Noise.h"
 
 class Terrain {
 public:
 	Terrain()
 	{
-		int chunkYSize = 50;
-		int chunkXSize = 50;
+
+		float amplitude = 1.0f;
+
+		const siv::PerlinNoise::seed_type seed = 123456u;
+		const siv::PerlinNoise perlin{ seed };
+
+		int chunkYSize = 150;
+		int chunkXSize = 150;
 
 		float distanceX = 1.0f / (chunkXSize - 1);
 		float distanceY = 1.0f / (chunkYSize - 1);
 
 		std::unique_ptr<ModelPlane> modelPlane = std::make_unique<ModelPlane>(chunkXSize - 1, chunkYSize - 1);
-		std::shared_ptr<Transform> transformPlane = std::make_shared<Transform>(nullptr, glm::vec3(0), glm::vec3(0, 0, 0), glm::vec3(1));
+		std::shared_ptr<Transform> transformPlane = std::make_shared<Transform>(nullptr, glm::vec3(0), glm::vec3(90, 0, 0), glm::vec3(1));
 
 		for (int iy = 0; iy < chunkYSize; iy++)
 		{
@@ -24,17 +31,17 @@ public:
 				float x = -0.5f + ix * distanceX;
 				float y = -0.5f + iy * distanceY;
 
-				float z = Noise::PerlinOctave(x, y, 1.0f, 1.0f) * 1/ 256.0f;
+				const float z = (float)perlin.octave2D_01((ix * 0.01), (iy * 0.01), 4) * amplitude;
 				int vertexIndex = ix + iy * chunkXSize;
 				glm::vec3 position = glm::vec3(x, y, z);
 
 				modelPlane->meshes[0]->vertices[vertexIndex].Position = position;
 
 				// Calculate normals using the surrounding vertices
-				glm::vec3 eUp = glm::vec3(x, y + distanceY, Noise::PerlinOctave(x, y + distanceY));
-				glm::vec3 eRight = glm::vec3(x + distanceX, y, Noise::PerlinOctave(x + distanceX, y));
-				glm::vec3 eDown = glm::vec3(x, y - distanceY, Noise::PerlinOctave(x, y - distanceY));
-				glm::vec3 eLeft = glm::vec3(x - distanceX, y, Noise::PerlinOctave(x - distanceX, y));
+				glm::vec3 eUp = glm::vec3(x, y + distanceY, (float)perlin.octave2D_01((ix * 0.01), ((iy + 1) * 0.01), 4) * amplitude);
+				glm::vec3 eRight = glm::vec3(x + distanceX, y, (float)perlin.octave2D_01(((ix + 1) * 0.01), ((iy + 1) * 0.01), 4) * amplitude);
+				glm::vec3 eDown = glm::vec3(x, y - distanceY, (float)perlin.octave2D_01((ix * 0.01), ((iy - 1) * 0.01), 4) * amplitude);
+				glm::vec3 eLeft = glm::vec3(x - distanceX, y, (float)perlin.octave2D_01(((ix - 1) * 0.01), ((iy + 1) * 0.01), 4) * amplitude);
 
 				// Compute cross products of consecutive edges (like making a fan)
 				glm::vec3 n1 = cross(eUp - position, eLeft - position);
@@ -46,7 +53,7 @@ public:
 				glm::vec3 normal = n1 + n2 + n3 + n4;
 
 				// Normalize
-				//normal = glm::normalize(normal);
+				normal = glm::normalize(normal);
 				modelPlane->meshes[0]->vertices[vertexIndex].Normal = normal;
 
 				//Point debugged normal in the correct direction e1(1,0,0)
@@ -78,8 +85,11 @@ public:
 			}
 		}
 		
+
+
 		modelPlane->meshes[0]->UpdateMesh();
-		Engine::GetInstance().sceneManager.objects.emplace_back(transformPlane, glm::vec3(1, 0, 0), std::move(modelPlane));
+		GameObject terrainObject(transformPlane, glm::vec3(0.5, 0.5, 0.5), std::move(modelPlane));
+		Engine::GetInstance().sceneManager.objects.emplace_back(terrainObject);
 	}
 
 private :
