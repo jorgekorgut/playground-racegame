@@ -33,12 +33,12 @@ ModelPlane::ModelPlane(int numCol, int numRow)
         for (int j = 0; j < numVertexX - 1; j++)
         {
             indices.push_back(i * numVertexX + j);
-            indices.push_back(i * numVertexX + j + 1);
             indices.push_back((i + 1) * numVertexX + j);
+            indices.push_back(i * numVertexX + j + 1);
 
             indices.push_back(i * numVertexX + j + 1);
-            indices.push_back((i + 1) * numVertexX + j + 1);
             indices.push_back((i + 1) * numVertexX + j);
+            indices.push_back((i + 1) * numVertexX + j + 1);
         }
 	}
 
