@@ -3,7 +3,7 @@
 #include <iostream>
 #include <shader/Shader.h>
 
-ModelPlane::ModelPlane(int numCol, int numRow)
+ModelPlane::ModelPlane(int numCol, int numRow) : numCol(numCol), numRow(numRow)
 {
     std::vector<Mesh::Vertex> vertices;
     std::vector<unsigned int> indices;

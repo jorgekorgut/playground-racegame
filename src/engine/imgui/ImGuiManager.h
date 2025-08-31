@@ -1,11 +1,21 @@
 #pragma once
 #include <glfw/glfw3.h>
+#include "Widget.h"
+#include <vector>
+#include <memory>
 
 class ImGuiManager{
 	public:
-	static void Initialize(GLFWwindow* window);
-	static void Destroy();
+	void Initialize(GLFWwindow* window);
+	void Destroy();
 
-	static void NewFrame();
-	static void Render();
+	void NewFrame();
+	void UpdateWidgetsData();
+	void Render();
+	void AttachWidgetData(std::shared_ptr<WidgetData> widgetData);
+	void DetachWidgetData(std::shared_ptr<WidgetData> widgetData);
+
+	void End();
+
+	std::vector<std::shared_ptr<WidgetData>> widgetList;
 };

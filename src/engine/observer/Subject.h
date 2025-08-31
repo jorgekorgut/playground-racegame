@@ -5,12 +5,12 @@
 
 class Subject {
 public:
-    virtual void Attach(Observer* observer)
+    virtual void Attach(std::shared_ptr<Observer> observer)
     {
         observers.push_back(observer);
 	}
 
-    virtual void Detach(Observer* observer)
+    virtual void Detach(std::shared_ptr<Observer> observer)
     {
 		observers.erase(std::remove(observers.begin(), observers.end(), observer), observers.end());
     }
@@ -25,5 +25,5 @@ public:
     virtual ~Subject() {}
 
 private :
-	std::vector<Observer*> observers;
+	std::vector<std::shared_ptr<Observer>> observers;
 };

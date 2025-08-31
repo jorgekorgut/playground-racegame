@@ -2,8 +2,6 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
-#include "imgui/ImGuiManager.h"
-
 
 WindowManager::WindowManager()
 {
@@ -39,8 +37,6 @@ void WindowManager::Initialize()
 
     glViewport(0, 0, windowWidth, windowHeight);
     glEnable(GL_DEPTH_TEST);
-
-	ImGuiManager::Initialize(window);
 }
 
 void WindowManager::framebuffer_size_callback(GLFWwindow* window, int width, int height)
@@ -51,5 +47,4 @@ void WindowManager::framebuffer_size_callback(GLFWwindow* window, int width, int
 void WindowManager::Destroy()
 {
     glfwTerminate();
-	ImGuiManager::Destroy();
 }

@@ -5,43 +5,100 @@
 #include <scene/ModelLine.h>
 #include "math/Noise.h"
 
-class Terrain {
+class Terrain : public WidgetData {
 public:
+	float amplitude = 1.0;
+	float oldAmplitude = amplitude;
+	std::vector<std::shared_ptr<ModelPlane>> modelPlaneList;
+
+	int chunkYVertexCount = 25;
+	int chunkXVertexCount = 25;
+	int chunksXCount = 20;
+	int chunksYCount = 20;
+	float chunkXSize = 1;
+	float chunkYSize = 1;
+
+	void UpdateData() override
+	{
+		ImGui::SliderFloat("Amplitude", &amplitude, 0.0f, 1.0f);
+
+		if (oldAmplitude != amplitude)
+		{
+			GenerateChunks();
+			oldAmplitude = amplitude;
+		}
+	}
+
 	Terrain()
 	{
+		modelPlaneList.reserve((chunksXCount+1) * (chunksYCount+1));
 
-		float amplitude = 1.0f;
+		for (int j = -chunksXCount / 2; j < chunksXCount / 2; j++)
+		{
+			for (int i = -chunksYCount / 2; i < chunksYCount / 2; i++)
+			{
+				modelPlaneList.emplace_back(std::make_shared<ModelPlane>(chunkXVertexCount - 1, chunkYVertexCount - 1));
+			}
+		}
+		
 
+		GenerateChunks();
+
+		for (std::shared_ptr<ModelPlane> currentModel : modelPlaneList)
+		{
+			std::shared_ptr<Transform> transformPlane = std::make_shared<Transform>(nullptr, glm::vec3(0, 0, 0), glm::vec3(90, 0, 0), glm::vec3(1));
+			GameObject terrainObject(transformPlane, glm::vec3(0.5, 0.5, 0.5), currentModel);
+			Engine::GetInstance().sceneManager.objects.emplace_back(terrainObject);
+		}
+	}
+
+	void GenerateChunks()
+	{
+		for (int j = -chunksXCount / 2; j < chunksXCount / 2; j++)
+		{
+			for (int i = -chunksYCount / 2; i < chunksYCount / 2; i++)
+			{
+				int planeIndex = (j + chunksXCount / 2) * (chunksYCount / 2) * 2 + i + chunksYCount / 2;
+
+				std::shared_ptr<ModelPlane> currentModel = modelPlaneList[planeIndex];
+
+				float offsetX = chunkXSize * j;
+				float offsetY = chunkYSize * i;
+
+				GenerateMesh(currentModel, offsetX, offsetY);
+			}
+		}
+	}
+
+	void GenerateMesh(std::shared_ptr<ModelPlane> modelPlane, float offsetX, float offsetY)
+	{
 		const siv::PerlinNoise::seed_type seed = 123456u;
 		const siv::PerlinNoise perlin{ seed };
 
-		int chunkYSize = 150;
-		int chunkXSize = 150;
+		float distanceX = 1.0f / modelPlane->numCol;
+		float distanceY = 1.0f / modelPlane->numRow;
 
-		float distanceX = 1.0f / (chunkXSize - 1);
-		float distanceY = 1.0f / (chunkYSize - 1);
+		int chunkXVertexCount = modelPlane->numCol + 1;
+		int chunkYVertexCount = modelPlane->numRow + 1;
 
-		std::unique_ptr<ModelPlane> modelPlane = std::make_unique<ModelPlane>(chunkXSize - 1, chunkYSize - 1);
-		std::shared_ptr<Transform> transformPlane = std::make_shared<Transform>(nullptr, glm::vec3(0), glm::vec3(90, 0, 0), glm::vec3(1));
-
-		for (int iy = 0; iy < chunkYSize; iy++)
+		for (int iy = 0; iy < chunkYVertexCount; iy++)
 		{
-			for (int ix = 0; ix < chunkXSize; ix++)
+			for (int ix = 0; ix < chunkXVertexCount; ix++)
 			{
-				float x = -0.5f + ix * distanceX;
-				float y = -0.5f + iy * distanceY;
+				float x = -0.5f + ix * distanceX + offsetX;
+				float y = -0.5f + iy * distanceY + offsetY;
 
-				const float z = (float)perlin.octave2D_01((ix * 0.01), (iy * 0.01), 4) * amplitude;
-				int vertexIndex = ix + iy * chunkXSize;
+				const float z = (float)perlin.octave2D_01(x, y, 4) * amplitude;
+				int vertexIndex = ix + iy * chunkXVertexCount;
 				glm::vec3 position = glm::vec3(x, y, z);
 
 				modelPlane->meshes[0]->vertices[vertexIndex].Position = position;
 
 				// Calculate normals using the surrounding vertices
-				glm::vec3 eUp = glm::vec3(x, y + distanceY, (float)perlin.octave2D_01((ix * 0.01), ((iy + 1) * 0.01), 4) * amplitude);
-				glm::vec3 eRight = glm::vec3(x + distanceX, y, (float)perlin.octave2D_01(((ix + 1) * 0.01), ((iy + 1) * 0.01), 4) * amplitude);
-				glm::vec3 eDown = glm::vec3(x, y - distanceY, (float)perlin.octave2D_01((ix * 0.01), ((iy - 1) * 0.01), 4) * amplitude);
-				glm::vec3 eLeft = glm::vec3(x - distanceX, y, (float)perlin.octave2D_01(((ix - 1) * 0.01), ((iy + 1) * 0.01), 4) * amplitude);
+				glm::vec3 eUp = glm::vec3(x, y + distanceY, (float)perlin.octave2D_01(x, y + distanceY, 4) * amplitude);
+				glm::vec3 eRight = glm::vec3(x + distanceX, y, (float)perlin.octave2D_01(x + distanceX, y, 4) * amplitude);
+				glm::vec3 eDown = glm::vec3(x, y - distanceY, (float)perlin.octave2D_01(x, y - distanceY, 4) * amplitude);
+				glm::vec3 eLeft = glm::vec3(x - distanceX, y, (float)perlin.octave2D_01(x - distanceX, y , 4) * amplitude);
 
 				// Compute cross products of consecutive edges (like making a fan)
 				glm::vec3 n1 = cross(eUp - position, eLeft - position);
@@ -84,14 +141,8 @@ public:
 				//Engine::GetInstance().sceneManager.debugObjects.emplace_back(lineObject);
 			}
 		}
-		
-
 
 		modelPlane->meshes[0]->UpdateMesh();
-		GameObject terrainObject(transformPlane, glm::vec3(0.5, 0.5, 0.5), std::move(modelPlane));
-		Engine::GetInstance().sceneManager.objects.emplace_back(terrainObject);
 	}
 
-private :
-	std::vector<GameObject> terrains;
 };

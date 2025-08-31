@@ -4,7 +4,7 @@
 #include "observer/Updatable.h"
 #include <vector>
 
-class CameraMovement : Observer, Updatable {
+class CameraMovement : public Observer, public Updatable {
 public:
 	CameraMovement(Camera & camera) : camera(camera)
 	{

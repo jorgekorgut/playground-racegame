@@ -8,6 +8,7 @@
 #include "engine/Engine.h"
 #include "game/CameraMovement.h"
 #include "game/Terrain.h"
+#include "game/GameManager.h"
 
 int main()
 {
@@ -15,14 +16,8 @@ int main()
 
     engine.Initialize();
 
-    engine.sceneManager.camera.Position = glm::vec3(0, 0, 5);
-
-    Terrain terrain;
-
-    CameraMovement cameraMovement(engine.sceneManager.camera);
-    engine.inputManager.Attach((Observer *)&cameraMovement);
-    engine.AttachUpdatable((Updatable*) &cameraMovement);
-
+    GameManager game;
+    
     engine.StartLoop();
 
     engine.Destroy();

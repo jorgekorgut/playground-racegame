@@ -14,15 +14,17 @@ Engine& Engine::GetInstance()
 void Engine::Initialize()
 {
 	windowManager.Initialize();
+    imguiManager.Initialize(windowManager.window);
 	inputManager.Initialize();
 
     sceneManager.Initialize();
     renderManager.Initialize();
+    
 }
 
 void Engine::Destroy()
 {
-
+    imguiManager.Destroy();
 }
 
 void Engine::StartLoop()
@@ -33,36 +35,32 @@ void Engine::StartLoop()
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
         
-        for (Updatable* currentUpdatable : updatableList)
+        for (std::shared_ptr<Updatable> & currentUpdatable : updatableList)
         {
             currentUpdatable->Update();
         }
 
         renderManager.Clear();
 
-        ImGuiManager::NewFrame();
+        imguiManager.NewFrame();
 
         renderManager.Render(windowManager, sceneManager);
 
-        ImGui::Begin("Properties");
-        std::string fps("FPS: ");
-        fps += std::to_string((int)ImGui::GetIO().Framerate);
-        ImGui::Text(fps.c_str());
-        ImGui::End();
-
-        ImGuiManager::Render();
+        imguiManager.UpdateWidgetsData();
+        
+        imguiManager.Render();
 
         glfwSwapBuffers(windowManager.window);
         glfwPollEvents();
     }
 }
 
-void Engine::AttachUpdatable(Updatable* object)
+void Engine::AttachUpdatable(std::shared_ptr<Updatable> object)
 {
     updatableList.push_back(object);
 }
 
-void Engine::DetachUpdatable(Updatable* object)
+void Engine::DetachUpdatable(std::shared_ptr<Updatable> object)
 {
     updatableList.erase(std::remove(updatableList.begin(), updatableList.end(), object), updatableList.end());
 }

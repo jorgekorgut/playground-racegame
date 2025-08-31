@@ -8,26 +8,26 @@ GameObject::GameObject(GameObject& other)
 	this->color = other.color;
 	if (other.model == nullptr)
 	{
-		this->model = std::make_unique<ModelPlane>(1, 1);
+		this->model = std::make_shared<ModelPlane>(1, 1);
 	}
 	else
 	{
-		this->model = std::move(other.model);
+		this->model = other.model;
 	}
 }
 
-GameObject::GameObject(const Transform& transform, glm::vec3 color, std::unique_ptr<Model> model)
+GameObject::GameObject(const Transform& transform, glm::vec3 color, const std::shared_ptr<Model> model)
 {
 	this->transform = transform;
 	this->color = color;
 
 	if (model == nullptr)
 	{
-		this->model = std::make_unique<ModelPlane>(1, 1);
+		this->model = std::make_shared<ModelPlane>(1, 1);
 	}
 	else
 	{
-		this->model = std::move(model);
+		this->model = model;
 	}
 }
 
