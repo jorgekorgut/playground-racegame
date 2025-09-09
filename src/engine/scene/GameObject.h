@@ -1,19 +1,34 @@
 #pragma once
-#include "Transform.h"
+#include "Engine.h"
 #include "Model.h"
 #include "ModelPlane.h"
+#include "Transform.h"
+#include "ecs/ComponentManager.h"
 
 class GameObject {
-public:
-    GameObject(GameObject& other);
-	GameObject(const Transform& transform = Transform(), glm::vec3 color = glm::vec3(1.0f, 0, 0), const std::shared_ptr<Model> = nullptr);
-	~GameObject();
+    public:
+    friend class Engine;
+    GameObject();
+    ~GameObject();
 
-	virtual void Initialize();
-	virtual void Destroy();
-	virtual void Update();
+    template <typename T>
+    void AddComponent(T& component) {
+        Engine::GetInstance().componentManager.AddComponent<T>(id, component);
 
-	std::shared_ptr<Model> model = nullptr;
-	glm::vec3 color;
-	Transform transform;
+        auto signature = Engine::GetInstance().entityManager.GetSignature(id);
+
+        signature.set(Engine::GetInstance().componentManager.GetComponentType<T>(), true);
+
+        Engine::GetInstance().entityManager.SetSignature(id, signature);
+
+        Engine::GetInstance().systemManager.EntitySignatureChanged(id, signature);
+    }
+
+    template <typename T>
+    T& GetComponent() {
+        return Engine::GetInstance().componentManager.GetComponent<T>(id);
+    }
+
+    private:
+    Entity id;
 };

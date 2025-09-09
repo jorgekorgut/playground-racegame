@@ -1,34 +1,21 @@
 #pragma once
+#include "Mesh.h"
 #include "shader/Shader.h"
 #include <vector>
-#include "Mesh.h"
 
-class Model
-{
-public:
-    Model() {}
-
-    Model(const Model& other)
-    {
-        meshes.reserve(other.meshes.size());
-        for (unsigned int i = 0; i < other.meshes.size(); i++)
-        {
-            meshes.push_back(std::make_unique<Mesh>(*other.meshes[i]));
-		}
+class Model {
+    public:
+    Model() {
     }
 
-    ~Model()
-    {
-
+    ~Model() {
     }
 
-    virtual void Render(Shader& shader)
-    {
-        for (unsigned int i = 0; i < meshes.size(); i++)
-        {
+    virtual void Render(Shader& shader) {
+        for(unsigned int i = 0; i < meshes.size(); i++) {
             meshes[i]->Render(shader);
         }
     }
 
-    std::vector<std::unique_ptr<Mesh>> meshes;
+    std::vector<std::shared_ptr<Mesh>> meshes;
 };

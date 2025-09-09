@@ -1,19 +1,13 @@
 #include "ResourceManager.h"
 #include <glad/glad.h>
 
-
-void ResourceManager::Initialize()
-{
-
+void ResourceManager::Initialize() {
 }
 
-void ResourceManager::Destroy()
-{
-
+void ResourceManager::Destroy() {
 }
 
-Shader ResourceManager::LoadShader(const char* vertexPath, const char* fragmentPath)
-{
+Shader ResourceManager::LoadShader(const char* vertexPath, const char* fragmentPath) {
     // 1. retrieve the vertex/fragment source code from filePath
     std::string vertexCode;
     std::string fragmentCode;
@@ -22,8 +16,7 @@ Shader ResourceManager::LoadShader(const char* vertexPath, const char* fragmentP
     // ensure ifstream objects can throw exceptions:
     vShaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
     fShaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
-    try
-    {
+    try {
         // open files
         vShaderFile.open(vertexPath);
         fShaderFile.open(fragmentPath);
@@ -35,11 +28,9 @@ Shader ResourceManager::LoadShader(const char* vertexPath, const char* fragmentP
         vShaderFile.close();
         fShaderFile.close();
         // convert stream into string
-        vertexCode = vShaderStream.str();
+        vertexCode   = vShaderStream.str();
         fragmentCode = fShaderStream.str();
-    }
-    catch (std::ifstream::failure e)
-    {
+    } catch(std::ifstream::failure e) {
         std::cout << "ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ" << std::endl;
     }
 
@@ -57,10 +48,10 @@ Shader ResourceManager::LoadShader(const char* vertexPath, const char* fragmentP
     glCompileShader(vertex);
     // print compile errors if any
     glGetShaderiv(vertex, GL_COMPILE_STATUS, &success);
-    if (!success)
-    {
+    if(!success) {
         glGetShaderInfoLog(vertex, 512, NULL, infoLog);
-        std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
+        std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n"
+                  << infoLog << std::endl;
     };
 
     // similiar for Fragment Shader
@@ -69,10 +60,10 @@ Shader ResourceManager::LoadShader(const char* vertexPath, const char* fragmentP
     glCompileShader(fragment);
     // print compile errors if any
     glGetShaderiv(fragment, GL_COMPILE_STATUS, &success);
-    if (!success)
-    {
+    if(!success) {
         glGetShaderInfoLog(fragment, 512, NULL, infoLog);
-        std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
+        std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n"
+                  << infoLog << std::endl;
     };
 
     // shader Program
@@ -82,15 +73,15 @@ Shader ResourceManager::LoadShader(const char* vertexPath, const char* fragmentP
     glLinkProgram(ID);
     // print linking errors if any
     glGetProgramiv(ID, GL_LINK_STATUS, &success);
-    if (!success)
-    {
+    if(!success) {
         glGetProgramInfoLog(ID, 512, NULL, infoLog);
-        std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
+        std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n"
+                  << infoLog << std::endl;
     }
 
     // delete the shaders as they're linked into our program now and no longer necessary
     glDeleteShader(vertex);
     glDeleteShader(fragment);
-    
-	return Shader(ID);
+
+    return Shader(ID);
 }

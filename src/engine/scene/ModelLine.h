@@ -1,10 +1,10 @@
 #pragma once
-#include "Model.h"
 #include "Mesh.h"
+#include "Model.h"
 
-class ModelLine : public Model{
-public:
-	ModelLine();
+class ModelLine : public Model {
+    public:
+    ModelLine();
 
-	~ModelLine();
+    ~ModelLine();
 };

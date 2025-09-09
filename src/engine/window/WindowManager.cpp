@@ -1,14 +1,10 @@
 #include "WindowManager.h"
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
 #include <iostream>
 
-WindowManager::WindowManager()
-{
+WindowManager::WindowManager() {
 }
 
-void WindowManager::Initialize()
-{
+void WindowManager::Initialize() {
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -19,8 +15,7 @@ void WindowManager::Initialize()
 #endif
 
     window = glfwCreateWindow(windowWidth, windowHeight, windowTitle, NULL, NULL);
-    if (window == NULL)
-    {
+    if(window == NULL) {
         std::cout << "Failed to create GLFW window" << std::endl;
         glfwTerminate();
         exit(1);
@@ -29,8 +24,7 @@ void WindowManager::Initialize()
     glfwMakeContextCurrent(window);
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
-    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
-    {
+    if(!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
         std::cout << "Failed to initialize GLAD" << std::endl;
         exit(1);
     }
@@ -39,12 +33,10 @@ void WindowManager::Initialize()
     glEnable(GL_DEPTH_TEST);
 }
 
-void WindowManager::framebuffer_size_callback(GLFWwindow* window, int width, int height)
-{
+void WindowManager::framebuffer_size_callback(GLFWwindow* window, int width, int height) {
     glViewport(0, 0, width, height);
 }
 
-void WindowManager::Destroy()
-{
+void WindowManager::Destroy() {
     glfwTerminate();
 }

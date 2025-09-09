@@ -1,21 +1,16 @@
 #pragma once
+#include <glad/glad.h>
 #include <glfw/glfw3.h>
-#include "Widget.h"
-#include <vector>
 #include <memory>
+#include <vector>
+#include "ecs/System.h"
 
-class ImGuiManager{
-	public:
-	void Initialize(GLFWwindow* window);
-	void Destroy();
+class ImGuiManager : public System {
+    public:
+    void Initialize(GLFWwindow* window);
+    void Destroy();
 
-	void NewFrame();
-	void UpdateWidgetsData();
-	void Render();
-	void AttachWidgetData(std::shared_ptr<WidgetData> widgetData);
-	void DetachWidgetData(std::shared_ptr<WidgetData> widgetData);
-
-	void End();
-
-	std::vector<std::shared_ptr<WidgetData>> widgetList;
+    void RenderUIData();
+    void NewFrame();
+    void Render();
 };

@@ -1,20 +1,13 @@
-# include "SceneManager.h"
+#include "SceneManager.h"
 
-SceneManager::SceneManager()
-{
+SceneManager::SceneManager() {
 }
 
-void SceneManager::Initialize()
-{
-
+void SceneManager::Initialize() {
 }
 
-void SceneManager::Destroy()
-{
-
+void SceneManager::Destroy() {
 }
 
-void SceneManager::Update()
-{
-
+void SceneManager::Update() {
 }

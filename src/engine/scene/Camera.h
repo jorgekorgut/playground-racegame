@@ -1,24 +1,15 @@
 #pragma once
 
-
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
 // Defines several possible options for camera movement. Used as abstraction to stay away from window-system specific input methods
-enum Camera_Movement {
-    FORWARD,
-    BACKWARD,
-    LEFT,
-    RIGHT,
-    UP,
-    DOWN
-};
+enum Camera_Movement { FORWARD, BACKWARD, LEFT, RIGHT, UP, DOWN };
 
 // An abstract camera class that processes input and calculates the corresponding Euler Angles, Vectors and Matrices for use in OpenGL
-class Camera
-{
-public:
+class Camera {
+    public:
     // camera Attributes
     glm::vec3 Position;
     glm::vec3 Front;
@@ -35,7 +26,10 @@ public:
     float Zoom;
 
     // constructor with vectors
-    Camera(glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f), float yaw = -90.0f, float pitch = 0.0f);
+    Camera(glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f),
+    glm::vec3 up              = glm::vec3(0.0f, 1.0f, 0.0f),
+    float yaw                 = -90.0f,
+    float pitch               = 0.0f);
 
     // constructor with scalar values
     Camera(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch);
@@ -52,7 +46,7 @@ public:
     // processes input received from a mouse scroll-wheel event. Only requires input on the vertical wheel-axis
     void ProcessMouseScroll(float yoffset);
 
-private:
+    private:
     // calculates the front vector from the Camera's (updated) Euler Angles
     void updateCameraVectors();
 };

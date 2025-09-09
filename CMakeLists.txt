@@ -79,7 +79,7 @@ file(GLOB_RECURSE SOURCE_FILES ${SRC_ROOT}/**.cpp ${SRC_ROOT}/*.cpp)
 
 include_directories(${SRC_ROOT}/engine)
 
-add_executable(${PROJECT_NAME} ${SOURCE_FILES} ${HEADER_FILES} ${SHADER_FILES} ${LIBS_FILES} "README.md")
+add_executable(${PROJECT_NAME} ${SOURCE_FILES} ${HEADER_FILES} ${SHADER_FILES} ${LIBS_FILES} "README.md" ".clang-format")
 
 source_group(TREE ${CMAKE_SOURCE_DIR} FILES ${SHADER_FILES})
 source_group(TREE ${CMAKE_SOURCE_DIR} FILES ${LIBS_FILES})
@@ -107,3 +107,10 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
         $<$<CONFIG:Debug>:${ASSIMP_DLLS_DEBUG_PATH}>
         $<$<CONFIG:Release>:${ASSIMP_DLLS_RELEASE_PATH}>
         $<TARGET_FILE_DIR:${PROJECT_NAME}>)
+
+
+# TEST=================================================================================================================
+enable_testing()
+
+include_directories(${CMAKE_SOURCE_DIR}/tests/)
+add_subdirectory(tests)

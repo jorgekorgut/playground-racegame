@@ -2,8 +2,15 @@
 
 ## Features
 
-- Camera
-- Primitive Types (Planes)
+### Engine  
+- Camera  
+- Primitive Types (Planes, Lines)  
+- Noise (Perlin)
+- Entity Component System
+
+### Game
+- Chunk Generation
+- Camera Control (Fly)
 
 ## Building
 
@@ -24,7 +31,9 @@ use CMakeGUI to configure and generate project files inside a build folder and s
 ## TODO
 
 - Batch Rendering : Include all objects into a single vertex buffer and index buffer to reduce draw calls
+- Optmize Perlin Noise Call function. (GPU/CPU Parallelization)
 
 ## References
 
 [learnopengl.com](LearnOpenGL) - Joey de Vries
+[https://austinmorlan.com/posts/entity_component_system/](Entity Component System) - Austin Morlan

@@ -1,19 +1,20 @@
 #pragma once
 #include <glad/glad.h>
-#include <GLFW/glfw3.h> 
+#include <GLFW/glfw3.h>
 
 class WindowManager {
-public:
-	WindowManager();
-	void Initialize();
-	void Destroy();
+    public:
+    WindowManager();
+    void Initialize();
+    void Destroy();
 
-	GLFWwindow* window = nullptr;
+    GLFWwindow* window = nullptr;
 
-	static void framebuffer_size_callback(GLFWwindow* window, int width, int height);
+    static void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 
-	int windowWidth = 800;
-	int windowHeight = 600;
-private:
-	const char* windowTitle = "Engine";
+    int windowWidth  = 800;
+    int windowHeight = 600;
+
+    private:
+    const char* windowTitle = "Engine";
 };

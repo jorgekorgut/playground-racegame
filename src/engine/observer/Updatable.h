@@ -1,6 +1,6 @@
 #pragma once
 
 class Updatable {
-public:
-	virtual void Update() {};
+    public:
+    virtual void Update() {};
 };
