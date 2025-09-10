@@ -1,16 +1,25 @@
 #pragma once
 #include "input/InputManager.h"
-#include "observer/Observer.h"
-#include "observer/Updatable.h"
+#include "scripts/ScriptableObject.h"
+#include "Engine.h"
 #include <vector>
 
-class CameraMovement : public Observer, public Updatable {
+class CameraMovement : public ScriptableObject {
     public:
-    CameraMovement(Camera& camera) : camera(camera) {
-        keysState.resize(1024, false);
+    CameraMovement() {
+    }
+
+    void Start() override {
+        Engine::GetInstance().inputManager.AddMouseMovementCallback(
+        [this](
+        InputManager::MouseMovementEvent value) { this->MouseMoved(value); });
     }
 
     void Update() override {
+        Camera& camera = Engine::GetInstance().sceneManager.camera;
+
+        std::vector<bool>& keysState = Engine::GetInstance().inputManager.keysState;
+
         if(keysState[GLFW_KEY_SPACE]) {
             camera.ProcessKeyboard(UP, Engine::GetInstance().deltaTime);
         }
@@ -31,35 +40,8 @@ class CameraMovement : public Observer, public Updatable {
         }
     }
 
-    virtual void Notify(int action, void* value) override {
-        if(action == Observer::Action::KEY_PRESSED) {
-            InputManager::KeyEvent* keyEvent =
-            static_cast<InputManager::KeyEvent*>(value);
-
-            int keyValue = keyEvent->key;
-
-            keysState[keyValue] = true;
-        }
-
-        if(action == Observer::Action::KEY_RELEASED) {
-            InputManager::KeyEvent* keyEvent =
-            static_cast<InputManager::KeyEvent*>(value);
-
-            int keyValue = keyEvent->key;
-
-            keysState[keyValue] = false;
-        }
-
-        if(action == Observer::Action::MOUSE_MOVED) {
-            InputManager::MouseMovementEvent* mouseMovementEvent =
-            static_cast<InputManager::MouseMovementEvent*>(value);
-            float x = mouseMovementEvent->x;
-            float y = mouseMovementEvent->y;
-            camera.ProcessMouseMovement(x, y);
-        }
+    void MouseMoved(InputManager::MouseMovementEvent value) {
+        Camera& camera = Engine::GetInstance().sceneManager.camera;
+        camera.ProcessMouseMovement(value.x, value.y);
     }
-
-    private:
-    Camera& camera;
-    std::vector<bool> keysState;
 };

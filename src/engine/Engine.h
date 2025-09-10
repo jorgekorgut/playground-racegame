@@ -1,7 +1,6 @@
 #pragma once
 
 #include "input/InputManager.h"
-#include "observer/Updatable.h"
 #include "render/RenderManager.h"
 #include "scene/SceneManager.h"
 #include "window/WindowManager.h"
@@ -10,6 +9,7 @@
 #include <ecs/SystemManager.h>
 #include <imgui/ImGuiManager.h>
 
+class ScriptableObject;
 class GameObject;
 
 class Engine {
@@ -22,8 +22,8 @@ class Engine {
     void Destroy();
     void StartLoop();
 
-    void AttachUpdatable(std::shared_ptr<Updatable> object);
-    void DetachUpdatable(std::shared_ptr<Updatable> object);
+    void AddScriptableObject(ScriptableObject* object);
+    void RemoveScriptableObject(ScriptableObject* object);
 
     WindowManager windowManager;
     InputManager inputManager;
@@ -41,7 +41,7 @@ class Engine {
     Engine() {
     }
 
-    std::vector<std::shared_ptr<Updatable>> updatableList;
+    std::vector<ScriptableObject*> scriptsList;
     float lastFrame = 0.0f; // Time of last frame
     static Engine* instance;
 };

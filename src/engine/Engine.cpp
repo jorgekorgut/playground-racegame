@@ -6,7 +6,7 @@
 #include <imgui/ImGuiManager.h>
 #include <scene/Material.h>
 #include <scene/GameObject.h>
-
+#include <scripts/ScriptableObject.h>
 
 Engine& Engine::GetInstance() {
     static Engine instance;
@@ -32,13 +32,17 @@ void Engine::Destroy() {
 }
 
 void Engine::StartLoop() {
+    for(ScriptableObject* currentScript : scriptsList) {
+        currentScript->Start();
+    }
+
     while(!glfwWindowShouldClose(windowManager.window)) {
         float currentFrame = static_cast<float>(glfwGetTime());
         deltaTime          = currentFrame - lastFrame;
         lastFrame          = currentFrame;
 
-        for(std::shared_ptr<Updatable>& currentUpdatable : updatableList) {
-            currentUpdatable->Update();
+        for(ScriptableObject* currentScript : scriptsList) {
+            currentScript->Update();
         }
 
         renderManager.Clear();
@@ -56,12 +60,11 @@ void Engine::StartLoop() {
     }
 }
 
-
-void Engine::AttachUpdatable(std::shared_ptr<Updatable> object) {
-    updatableList.push_back(object);
+void Engine::AddScriptableObject(ScriptableObject* object) {
+    scriptsList.push_back(object);
 }
 
-void Engine::DetachUpdatable(std::shared_ptr<Updatable> object) {
-    updatableList.erase(std::remove(updatableList.begin(), updatableList.end(), object),
-    updatableList.end());
+void Engine::RemoveScriptableObject(ScriptableObject* object) {
+    scriptsList.erase(std::remove(scriptsList.begin(), scriptsList.end(), object),
+    scriptsList.end());
 }

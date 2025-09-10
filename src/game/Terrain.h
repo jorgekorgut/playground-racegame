@@ -36,7 +36,6 @@ class Terrain {
         }
     }
 
-
     ~Terrain() {
     }
 
@@ -80,8 +79,6 @@ class Terrain {
     }
 
     void GenerateMesh(std::shared_ptr<ModelPlane> modelPlane, float offsetX, float offsetY) {
-
-
         float distanceX = 1.0f / modelPlane->numCol;
         float distanceY = 1.0f / modelPlane->numRow;
 

@@ -9,6 +9,7 @@ float InputManager::lastX     = 0;
 float InputManager::lastY     = 0;
 
 InputManager::InputManager() {
+    keysState.resize(1024, false);
 }
 
 void InputManager::Initialize() {
@@ -39,9 +40,26 @@ void InputManager::SetMenuMode(bool enabled) {
     }
 }
 
+void InputManager::AddMouseMovementCallback(std::function<void(MouseMovementEvent)> callback) {
+    mouseMovementCallbacks.push_back(callback);
+}
+
+void InputManager::ClearMouseMovementCallback() {
+    mouseMovementCallbacks.clear();
+}
+
+void InputManager::AddMouseButtonCallback(std::function<void(MouseButtonEvent)> callback) {
+    mouseButtonCallbacks.push_back(callback);
+}
+
+void InputManager::ClearMouseButtonCallback() {
+    mouseButtonCallbacks.clear();
+}
+
 void InputManager::ProcessKeyboardInput(GLFWwindow* window, int key, int scancode, int action, int mods) {
-    if(!isMenuMode)
+    if(!isMenuMode) {
         return;
+    }
 
     if(key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
         SetMenuMode(false);
@@ -52,15 +70,11 @@ void InputManager::ProcessKeyboardInput(GLFWwindow* window, int key, int scancod
     }
 
     if(action == GLFW_PRESS) {
-        KeyEvent ke = KeyEvent{ key };
-        Engine::GetInstance().inputManager.Notify(
-        Observer::Action::KEY_PRESSED, (void*)&ke);
+        Engine::GetInstance().inputManager.keysState[key] = true;
     }
 
     if(action == GLFW_RELEASE) {
-        KeyEvent ke = KeyEvent{ key };
-        Engine::GetInstance().inputManager.Notify(
-        Observer::Action::KEY_RELEASED, (void*)&ke);
+        Engine::GetInstance().inputManager.keysState[key] = false;
     }
 }
 
@@ -81,16 +95,22 @@ void InputManager::ProcessMouseButtonInput(GLFWwindow* window, int button, int a
 
     if(action == GLFW_PRESS || action == GLFW_RELEASE) {
         MouseButtonEvent mbe = MouseButtonEvent{ button, action };
-        Engine::GetInstance().inputManager.Notify(
-        Observer::Action::MOUSE_BUTTON, (void*)&mbe);
+
+        std::vector<std::function<void(MouseButtonEvent)>>& mouseButtonCallbacks =
+        Engine::GetInstance().inputManager.mouseButtonCallbacks;
+
+        for(const auto& callback : mouseButtonCallbacks) {
+            callback(mbe);
+        }
     }
 }
 
 void InputManager::ProcessMouseMoveInput(GLFWwindow* window, double xpos, double ypos) {
     ImGui_ImplGlfw_CursorPosCallback(window, xpos, ypos);
 
-    if(!isMenuMode)
+    if(!isMenuMode) {
         return;
+    }
 
     float fxpos = (float)xpos;
     float fypos = (float)ypos;
@@ -107,6 +127,11 @@ void InputManager::ProcessMouseMoveInput(GLFWwindow* window, double xpos, double
     lastX = fxpos;
     lastY = fypos;
 
+    std::vector<std::function<void(MouseMovementEvent)>>& mouseMovementCallbacks =
+    Engine::GetInstance().inputManager.mouseMovementCallbacks;
     MouseMovementEvent mme = MouseMovementEvent{ xoffset, yoffset };
-    Engine::GetInstance().inputManager.Notify(Observer::Action::MOUSE_MOVED, (void*)&mme);
+
+    for(const auto& callback : mouseMovementCallbacks) {
+        callback(mme);
+    }
 }
