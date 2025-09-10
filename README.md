@@ -19,6 +19,7 @@ Dependency libraries
 - GLAD (You need to install and specify PATH in CMake)
 - ASSIMP (You need to install and specify PATH in CMake) Debug/Release Support
 - IMGUI (Automatically installed)
+- STB (Automatically installed)
 
 charge all submodules
 ``` git pull --recurse-submodules ```

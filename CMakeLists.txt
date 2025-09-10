@@ -70,6 +70,15 @@ set(ASSIMP_DLLS_DEBUG_PATH  "${ASSIMP_ROOT}/bin/Debug")
 set(ASSIMP_DLLS_RELEASE_PATH "${ASSIMP_ROOT}/bin/Release")
 # ASSIMP ====================================================================================================
 
+# STB_IMAGE Configuration ====================================================================================
+set(STB_ROOT "${CMAKE_SOURCE_DIR}/libs/stb")
+if(NOT EXISTS "${STB_ROOT}/stb_image.h")
+    message(FATAL_ERROR "Could not find stb_image.h in '${STB_ROOT}/stb'. Please pull the stb submodule 'git pull --recurse-submodules'.")
+endif()
+include_directories(${LIBS_ROOT}/stb)
+
+# STB_IMAGE ====================================================================================================
+
 set(SRC_ROOT "src")
 set(SHADER_ROOT "shaders")
 
