@@ -51,15 +51,12 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
 
 
 # copy engine resources to build folder
-set(ENGINE_BUILD_DIR "${ENGINE_ROOT}/build/Debug")
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD 
-    COMMAND ${CMAKE_COMMAND} -E create_symlink "${ENGINE_BUILD_DIR}/engine_shaders" "${CMAKE_BINARY_DIR}/$<CONFIG>/engine_shaders")
+    COMMAND ${CMAKE_COMMAND} -E create_symlink "${ENGINE_ROOT}/shaders" "${CMAKE_BINARY_DIR}/$<CONFIG>/engine_shaders")
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD 
-    COMMAND ${CMAKE_COMMAND} -E create_symlink "${ENGINE_BUILD_DIR}/engine_shaders" "${CMAKE_BINARY_DIR}/engine_shaders")
+    COMMAND ${CMAKE_COMMAND} -E create_symlink "${ENGINE_ROOT}/shaders" "${CMAKE_BINARY_DIR}/engine_shaders")
 
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD 
-    COMMAND ${CMAKE_COMMAND} -E create_symlink "${ENGINE_BUILD_DIR}/engine_resources" "${CMAKE_BINARY_DIR}/$<CONFIG>/engine_resources")
+    COMMAND ${CMAKE_COMMAND} -E create_symlink "${ENGINE_ROOT}/resources" "${CMAKE_BINARY_DIR}/$<CONFIG>/engine_resources")
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD 
-    COMMAND ${CMAKE_COMMAND} -E create_symlink "${ENGINE_BUILD_DIR}/engine_resources" "${CMAKE_BINARY_DIR}/engine_resources")
-
-
+    COMMAND ${CMAKE_COMMAND} -E create_symlink "${ENGINE_ROOT}/resources" "${CMAKE_BINARY_DIR}/engine_resources")
