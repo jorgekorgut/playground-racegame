@@ -60,3 +60,5 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E create_symlink "${ENGINE_ROOT}/resources" "${CMAKE_BINARY_DIR}/$<CONFIG>/engine_resources")
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD 
     COMMAND ${CMAKE_COMMAND} -E create_symlink "${ENGINE_ROOT}/resources" "${CMAKE_BINARY_DIR}/engine_resources")
+
+add_dependencies(${PROJECT_NAME} Engine)
