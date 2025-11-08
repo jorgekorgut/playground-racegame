@@ -31,10 +31,16 @@ use CMakeGUI to configure and generate project files inside a build folder and s
 
 ## TODO
 
-- Batch Rendering : Include all objects into a single vertex buffer and index buffer to reduce draw calls
-- Optmize Perlin Noise Call function. (GPU/CPU Parallelization)
+- Batch Rendering : Include all objects into a single vertex buffer and index buffer to reduce draw calls.
+- Optmize Perlin Noise Call function. (GPU/CPU Parallelization).
+- Add LOD (Level of Detail) for terrain.
+- Add procedurally generated grass with wind effect.
+- Add procedurally generated roads.
+- Add the car model and implement car physics.
+- Work on a better UI for the engine. (Add terrain parameters)
 
 ## References
 
 [learnopengl.com](LearnOpenGL) - Joey de Vries
 [https://austinmorlan.com/posts/entity_component_system/](Entity Component System) - Austin Morlan
+[https://github.com/wwwtyro/glsl-atmosphere](glsl-atmosphere) - wwwtyro

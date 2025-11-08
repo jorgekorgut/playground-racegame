@@ -2,6 +2,7 @@
 #include <glad/glad.h>
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
+#include <string>
 
 void ResourceManager::Initialize() {
 }
@@ -96,7 +97,7 @@ Texture ResourceManager::LoadTexture(const std::string& vertexPath) {
     unsigned char* data =
     stbi_load(vertexPath.c_str(), &width, &height, &nrComponents, 0);
     if(data) {
-        GLenum format;
+        GLenum format = 0;
         if(nrComponents == 1)
             format = GL_RED;
         else if(nrComponents == 3)

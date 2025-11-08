@@ -5,7 +5,6 @@
 class WindowManager {
     public:
     WindowManager();
-    void Initialize();
     void Destroy();
 
     GLFWwindow* window = nullptr;

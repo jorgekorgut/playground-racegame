@@ -21,6 +21,8 @@ class Mesh {
     std::vector<unsigned int> indices;
 
     protected:
-    unsigned int VAO, VBO, EBO;
+    unsigned int VAO = 0;
+    unsigned int VBO = 0;
+    unsigned int EBO = 0;
     void setupMesh();
 };

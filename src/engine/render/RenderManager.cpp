@@ -44,22 +44,37 @@ void RenderManager::Clear() {
 }
 
 void RenderManager::Render(WindowManager& windowManager, SceneManager& sceneManager) {
+    Engine& engine = Engine::GetInstance();
     glm::mat4 projection = glm::perspective(glm::radians(sceneManager.camera.Zoom),
     (float)windowManager.windowWidth / (float)windowManager.windowHeight, 0.1f, 100.0f);
     glm::mat4 view = sceneManager.camera.GetViewMatrix();
 
+    // Draw skybox
+    glm::mat4 viewWithoutTranslation =
+    glm::mat4(glm::mat3(sceneManager.camera.GetViewMatrix()));
+    glDepthMask(GL_FALSE);
+    Shader& skyShader = engine.sceneManager.sky.shader;
+    skyShader.use();
+    skyShader.setMat4("projection", projection);
+    skyShader.setMat4("view", viewWithoutTranslation);
+    skyShader.setVec3("lightPos", sceneManager.sky.sunLight.transform.position);
+    engine.sceneManager.sky.model.Render(skyShader);
+    glDepthMask(GL_TRUE);
+
+    // Draw entities
     shader.use();
     shader.setMat4("projection", projection);
     shader.setMat4("view", view);
     shader.setVec3("viewPos", sceneManager.camera.Position);
 
+    shader.setVec3("lightPos", sceneManager.sky.sunLight.transform.position);
+    shader.setVec3("lightColor", sceneManager.sky.sunLight.color);
+
     for(const Entity& currentEntity : mEntities) {
         Transform& transform =
-        Engine::GetInstance().componentManager.GetComponent<Transform>(currentEntity);
-        Material& material =
-        Engine::GetInstance().componentManager.GetComponent<Material>(currentEntity);
-        Model& modelMesh =
-        Engine::GetInstance().componentManager.GetComponent<Model>(currentEntity);
+        engine.componentManager.GetComponent<Transform>(currentEntity);
+        Material& material = engine.componentManager.GetComponent<Material>(currentEntity);
+        Model& modelMesh = engine.componentManager.GetComponent<Model>(currentEntity);
 
         glm::mat4 model = transform.GetModelMatrix();
         shader.setMat4("model", model);

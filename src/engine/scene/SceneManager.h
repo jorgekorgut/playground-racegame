@@ -1,12 +1,12 @@
 #pragma once
 #include "Camera.h"
 #include <vector>
+#include "Sky.h"
 
 class SceneManager {
     public:
-    SceneManager();
-    void Initialize();
-    void Destroy();
-    void Update();
+    SceneManager() {
+    }
     Camera camera;
+    Sky sky;
 };

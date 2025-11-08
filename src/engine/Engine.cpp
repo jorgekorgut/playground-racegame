@@ -19,11 +19,9 @@ void Engine::Initialize() {
     componentManager.RegisterComponent<Material>();
     componentManager.RegisterComponent<UIObject>();
 
-    windowManager.Initialize();
     imguiManager.Initialize(windowManager.window);
     inputManager.Initialize();
 
-    sceneManager.Initialize();
     renderManager.Initialize();
 }
 
