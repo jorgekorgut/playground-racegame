@@ -1,5 +1,5 @@
 #pragma once
-#include "input/InputManager.h"
+// #include "input/InputManager.h"
 #include "scripts/ScriptableObject.h"
 #include "Engine.h"
 #include <vector>
@@ -20,22 +20,22 @@ class CameraMovement : public ScriptableObject {
 
         std::vector<bool>& keysState = Engine::GetInstance().inputManager.keysState;
 
-        if(keysState[GLFW_KEY_SPACE]) {
+        if(keysState[ENGINE_KEY_SPACE]) {
             camera.ProcessKeyboard(UP, Engine::GetInstance().deltaTime);
         }
-        if(keysState[GLFW_KEY_LEFT_SHIFT]) {
+        if(keysState[ENGINE_KEY_LEFT_SHIFT]) {
             camera.ProcessKeyboard(DOWN, Engine::GetInstance().deltaTime);
         }
-        if(keysState[GLFW_KEY_W]) {
+        if(keysState[ENGINE_KEY_W]) {
             camera.ProcessKeyboard(FORWARD, Engine::GetInstance().deltaTime);
         }
-        if(keysState[GLFW_KEY_S]) {
+        if(keysState[ENGINE_KEY_S]) {
             camera.ProcessKeyboard(BACKWARD, Engine::GetInstance().deltaTime);
         }
-        if(keysState[GLFW_KEY_A]) {
+        if(keysState[ENGINE_KEY_A]) {
             camera.ProcessKeyboard(LEFT, Engine::GetInstance().deltaTime);
         }
-        if(keysState[GLFW_KEY_D]) {
+        if(keysState[ENGINE_KEY_D]) {
             camera.ProcessKeyboard(RIGHT, Engine::GetInstance().deltaTime);
         }
     }

@@ -1,13 +1,11 @@
 #pragma once
 #include "math/Noise.h"
 #include <Engine.h>
-#include <math/Noise.h>
 #include <scene/GameObject.h>
 #include <scene/Material.h>
 #include <scene/ModelLine.h>
 #include <imgui/UIObject.h>
-#include <imgui.h>
-
+#include <imgui/ImGuiManager.h>
 
 class Terrain {
     public:
@@ -28,7 +26,7 @@ class Terrain {
     const siv::PerlinNoise perlin{ seed };
 
     void UpdateData() {
-        ImGui::SliderFloat("Amplitude", &amplitude, 0.0f, 1.0f);
+        ImGuiManager::SliderFloat("Amplitude", &amplitude, 0.0f, 1.0f);
 
         if(oldAmplitude != amplitude) {
             GenerateChunks();

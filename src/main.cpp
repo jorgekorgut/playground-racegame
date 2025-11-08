@@ -1,14 +1,8 @@
-#include <backends/imgui_impl_glfw.h>
-#include <backends/imgui_impl_opengl3.h>
-#include <imgui.h>
+#include "Engine.h"
 
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
-
-#include "engine/Engine.h"
-#include "game/CameraMovement.h"
-#include "game/GameManager.h"
-#include "game/Terrain.h"
+#include "CameraMovement.h"
+#include "GameManager.h"
+#include "Terrain.h"
 
 int main() {
     Engine& engine = Engine::GetInstance();
